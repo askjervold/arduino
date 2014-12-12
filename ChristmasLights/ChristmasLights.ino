@@ -17,7 +17,7 @@ const int numLeds = 9;
 const byte leds [numLeds] = {green_one, red_one, green_two, red_two, green_three, red_three, green_four, red_four, green_five};
 
 // Variables that will change
-int playingJingle = 0;
+boolean playingJingle = false;
 int inactiveLedCounter = 0;
 
 void setup() {
@@ -46,7 +46,7 @@ void loop() {
       playJingle();
     }
     loopLeds();
-    delay(100);
+    delay(150);
   }
 }
 
@@ -65,6 +65,7 @@ void loopLeds() {
 }
 
 void playJingle() {
+  for (int i = 0; i < 20; i++) {
   if (!playingJingle) {
       redsOn();
       greensOff();  
@@ -75,6 +76,7 @@ void playJingle() {
     }
   playingJingle = !playingJingle;
   delay(250);
+  }
 }
 
 void greensOn() {
