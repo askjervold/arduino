@@ -1,3 +1,5 @@
+#include "pitches.h"
+
 // Light pins
 const byte red_one = 5;
 const byte red_two = 7;
@@ -15,10 +17,15 @@ const byte buttonPin = 2;
 // Other constants
 const int numLeds = 9;
 const byte leds [numLeds] = {green_one, red_one, green_two, red_two, green_three, red_three, green_four, red_four, green_five};
+const int noteDuration = 1000;
+const int half_note = noteDuration/2;
+const int quarter_note = noteDuration/4;
 
 // Variables that will change
 boolean playingJingle = false;
 int inactiveLedCounter = 0;
+boolean redsOn = false;
+boolean greensOn = false;
 
 void setup() {
   // Outputs
@@ -36,8 +43,7 @@ void setup() {
   pinMode(buttonPin, INPUT);
   
   // Starting leds
-  greensOn();
-  redsOn();
+
 }
 
 void loop() {
@@ -65,46 +71,51 @@ void loopLeds() {
 }
 
 void playJingle() {
+  // We want to alternate reds and greens, so we will pre-toggle the greens
+  toggleGreens();
   for (int i = 0; i < 20; i++) {
-  if (!playingJingle) {
-      redsOn();
-      greensOff();  
-    }
-    else {
-      redsOff();
-      greensOn();
-    }
-  playingJingle = !playingJingle;
-  delay(250);
+    toggleReds();
+    toggleGreens();
+    delay(250);
   }
+  // Reset booleans
+  greensOn = false;
+  redsOn = false;
+  
+  // Jingle finished
+  playingJingle = false;
 }
 
-void greensOn() {
-  digitalWrite(green_one, HIGH);
-  digitalWrite(green_two, HIGH);
-  digitalWrite(green_three, HIGH);
-  digitalWrite(green_four, HIGH);
-  digitalWrite(green_five, HIGH);
+void toggleGreens() {
+  if (greensOn) {
+    digitalWrite(green_one, LOW);
+    digitalWrite(green_two, LOW);
+    digitalWrite(green_three, LOW);
+    digitalWrite(green_four, LOW);
+    digitalWrite(green_five, LOW);
+  }
+  else {
+    digitalWrite(green_one, HIGH);
+    digitalWrite(green_two, HIGH);
+    digitalWrite(green_three, HIGH);
+    digitalWrite(green_four, HIGH);
+    digitalWrite(green_five, HIGH);
+  }
+  greensOn = !greensOn;
 }
 
-void greensOff() {
-  digitalWrite(green_one, LOW);
-  digitalWrite(green_two, LOW);
-  digitalWrite(green_three, LOW);
-  digitalWrite(green_four, LOW);
-  digitalWrite(green_five, LOW);
-}
-
-void redsOn() {
-  digitalWrite(red_one, HIGH);
-  digitalWrite(red_two, HIGH);
-  digitalWrite(red_three, HIGH);
-  digitalWrite(red_four, HIGH);
-}
-
-void redsOff() {
-  digitalWrite(red_one, LOW);
-  digitalWrite(red_two, LOW);
-  digitalWrite(red_three, LOW);
-  digitalWrite(red_four, LOW);
+void toggleReds() {
+  if (redsOn) {
+    digitalWrite(red_one, LOW);
+    digitalWrite(red_two, LOW);
+    digitalWrite(red_three, LOW);
+    digitalWrite(red_four, LOW);
+  }
+  else {
+    digitalWrite(red_one, HIGH);
+    digitalWrite(red_two, HIGH);
+    digitalWrite(red_three, HIGH);
+    digitalWrite(red_four, HIGH);
+  }
+  redsOn = !redsOn;
 }
